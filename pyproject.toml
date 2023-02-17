@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "sinker"
+version = "0.1.0"
+description = "Synchronize Postgres to Elasticsearch"
+authors = ["Loren Siebert <loren@paradigm.xyz>"]
+license = "MIT/Apache-2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+elasticsearch = "^8.6.1"
+environs = "^9.5.0"
+psycopg = "^3.1.8"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.0.0"
+black = "^23.1.0"
+mypy = "^1.0.0"
+psycopg-binary = "^3.1.8"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.1"
+pytest-cov = "*"
+pytest-docker-compose = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
