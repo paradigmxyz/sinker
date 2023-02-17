@@ -1,0 +1,54 @@
+{
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "description": {
+        "type": "text"
+      },
+      "enrollments": {
+        "properties": {
+          "grade": {
+            "type": "float"
+          },
+          "student": {
+            "properties": {
+              "gpa": {
+                "type": "float"
+              },
+              "person": {
+                "properties": {
+                  "name": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "type": "text"
+      },
+      "teacher": {
+        "properties": {
+          "person": {
+            "properties": {
+              "name": {
+                "type": "text"
+              }
+            }
+          },
+          "salary": {
+            "type": "float"
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "index": {
+      "number_of_shards": "1",
+      "number_of_replicas": "0"
+    }
+  }
+}
