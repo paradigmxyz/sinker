@@ -1,8 +1,7 @@
 version: '3.9'
 
 services:
-  # Connects on docker network, server is `db:5432`
-  db:
+  postgres:
     image: postgres:15
     command: postgres -c wal_level=logical -c max_replication_slots=10
     environment:
@@ -13,7 +12,7 @@ services:
       - '5432:5432'
 
 
-  es01:
+  elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     volumes:
       - esdata01:/usr/share/elasticsearch/data
