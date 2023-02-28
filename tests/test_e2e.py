@@ -1,6 +1,7 @@
 import os
 from time import sleep
 
+import elastic_transport
 import elasticsearch
 import psycopg
 import pytest
@@ -21,7 +22,14 @@ def wait_for_pg_es():
             except psycopg.OperationalError:
                 print("Need a database to connect to...")
                 sleep(1)
-    get_client().cluster.health(wait_for_status="green")
+
+    while True:
+        try:
+            get_client().cluster.health(wait_for_status="green")
+            break
+        except elastic_transport.ConnectionError:
+            print("Need an Elasticsearch instance to connect to...")
+            sleep(1)
 
 
 def test_end_to_end(wait_for_pg_es):

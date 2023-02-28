@@ -6,6 +6,9 @@ authors = ["Loren Siebert <loren@paradigm.xyz>"]
 license = "MIT/Apache-2.0"
 readme = "README.md"
 
+[tool.poetry.scripts]
+sinker = "sinker.__main__:main"
+
 [tool.poetry.dependencies]
 python = "^3.11"
 elasticsearch = "^8.6.1"
@@ -21,7 +24,6 @@ psycopg-binary = "^3.1.8"
 [tool.poetry.group.test.dependencies]
 pytest = "^7.2.1"
 pytest-cov = "*"
-pytest-docker-compose = "*"
 
 [build-system]
 requires = ["poetry-core"]
