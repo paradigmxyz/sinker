@@ -12,8 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Start docker containers
-        run: docker-compose --env-file=.env.test up --detach
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
@@ -24,5 +22,7 @@ jobs:
           poetry-version: 1.4.0
       - name: Install dependencies
         run: poetry install
+      - name: Start docker containers
+        run: docker-compose --env-file=.env.test up --detach
       - name: Tests
         run: pytest -s
