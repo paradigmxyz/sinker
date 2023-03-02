@@ -10,7 +10,7 @@ readme = "README.md"
 sinker = "sinker.__main__:main"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.11"
 elasticsearch = "^8.6.1"
 environs = "^9.5.0"
 psycopg = "^3.1.8"
