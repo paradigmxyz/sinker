@@ -26,9 +26,9 @@ jobs:
 
     services:
       elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:${{ env.STACK_VERSION }}
+        image: docker.elastic.co/elasticsearch/elasticsearch:$STACK_VERSION
         ports:
-          - ${{ env.ELASTICSEARCH_PORT }}:${{ env.ELASTICSEARCH_PORT }}
+          - $ELASTICSEARCH_PORT:$ELASTICSEARCH_PORT
         env:
           xpack.security.enabled: false
           discovery.type: single-node
@@ -41,9 +41,9 @@ jobs:
         image: postgres:15
         command: postgres -c wal_level=logical -c max_replication_slots=1
         env:
-          POSTGRES_USER: ${{ env.PGUSER }}
-          POSTGRES_PASSWORD: ${{ env.PGPASSWORD }}
-          POSTGRES_DB: ${{ env.PGDATABASE }}
+          POSTGRES_USER: $PGUSER
+          POSTGRES_PASSWORD: $PGPASSWORD
+          POSTGRES_DB: $PGDATABASE
         ports:
           - 5432:5432
 
