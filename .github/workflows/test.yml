@@ -25,4 +25,4 @@ jobs:
       - name: Start docker containers
         run: docker-compose --env-file=.env.test up --detach
       - name: Tests
-        run: pytest -s
+        run: poetry run pytest -s
