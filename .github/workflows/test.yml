@@ -1,0 +1,62 @@
+name: CI
+
+on: [ push, pull_request, workflow_dispatch ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    env:
+      SINKER_DEFINITIONS_PATH: 'tests/fixtures'
+      SINKER_SCHEMA: sinker
+      SINKER_POLL_INTERVAL: 10
+      SINKER_LOG_LEVEL: DEBUG
+      PGPASSWORD: password
+      PGHOST: localhost
+      PGUSER: dev
+      PGDATABASE: dev_db
+      ELASTICSEARCH_HOST: localhost
+      ELASTICSEARCH_PORT: 9200
+      ELASTICSEARCH_SCHEME: http
+      STACK_VERSION: 8.6.1
+
+    services:
+      elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:${{ env.STACK_VERSION }}
+        ports:
+          - ${{ env.ELASTICSEARCH_PORT }}:${{ env.ELASTICSEARCH_PORT }}
+        env:
+          xpack.security.enabled: false
+          discovery.type: single-node
+          action.auto_create_index: false
+        ulimits:
+          memlock:
+            soft: -1
+            hard: -1
+      postgres:
+        image: postgres:15
+        command: postgres -c wal_level=logical -c max_replication_slots=1
+        env:
+          POSTGRES_USER: ${{ env.PGUSER }}
+          POSTGRES_PASSWORD: ${{ env.PGPASSWORD }}
+          POSTGRES_DB: ${{ env.PGDATABASE }}
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: 1.4.0
+      - name: Install dependencies
+        run: poetry install
+      - name: Tests
+        run: pytest -s
