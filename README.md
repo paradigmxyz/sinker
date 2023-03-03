@@ -193,6 +193,16 @@ The Elasticsearch index configurations are stored in the `people.json` and `cour
 }
 ```
 
+### Dry Run
+
+Before running sinker, do a dry run on one of your view-index mappings to verify everything is defined correctly:
+
+1. Execute the SQL query with `LIMIT 1` in the materialized view definition file to see what a sample JSON record will
+   look like.
+2. Create the destination Elasticsearch index with the settings and mappings in the index configuration file.
+3. In Kibana or via cURL, `PUT` the sample JSON record into the Elasticsearch index.
+4. Verify the record is indexed as you expect in Elasticsearch.
+
 ## Running
 
 Once you have the environment variables and configuration files set up, you can run Sinker with:
@@ -217,6 +227,43 @@ performance:
    usage of Sinker and the CPU load on the Elasticsearch cluster.
 4. Run `EXPLAIN ANALYZE` on your materialized view queries to see if you can optimize them (e.g., by adding indexes on
    the foreign keys).
+
+## Developing
+
+Before getting started, make sure you have [`poetry`](https://python-poetry.org/docs/)
+and [`docker-compose`](https://docs.docker.com/compose/install/) installed.
+
+```shell
+% docker-compose --version
+Docker Compose version v2.15.1
+% poetry --version
+Poetry (version 1.4.0)
+```
+
+Clone the repo:
+
+```shell
+git clone git@github.com:paradigm-operations/sinker.git
+cd sinker
+```
+
+Install dependencies:
+
+```shell
+poetry install
+```
+
+Spin up Postgres and Elasticsearch:
+
+```shell
+docker-compose --env-file=.env.test up -d
+```
+
+Run tests:
+
+```shell
+poetry run pytest -s
+```
 
 ## Contributing
 
