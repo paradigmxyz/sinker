@@ -204,6 +204,66 @@ The Elasticsearch index configurations are stored in the `people.json` and `cour
 }
 ```
 
+Using `strict` mappings helps ensure the JSON document structure from the materialized view matches what Elasticsearch
+expects in the index.
+
+```json
+{
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "description": {
+        "type": "text"
+      },
+      "enrollments": {
+        "properties": {
+          "grade": {
+            "type": "float"
+          },
+          "student": {
+            "properties": {
+              "gpa": {
+                "type": "float"
+              },
+              "person": {
+                "properties": {
+                  "name": {
+                    "type": "text"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "type": "text"
+      },
+      "teacher": {
+        "properties": {
+          "person": {
+            "properties": {
+              "name": {
+                "type": "text"
+              }
+            }
+          },
+          "salary": {
+            "type": "float"
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "index": {
+      "number_of_shards": "1",
+      "number_of_replicas": "0"
+    }
+  }
+}
+```
+
 ### Dry Run
 
 Before running sinker, do a dry run on one of your view-index mappings to verify everything is defined correctly:
