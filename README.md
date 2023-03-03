@@ -68,6 +68,8 @@ To do this, you need to do two things reliably:
 
 ## How it Works
 
+![diagram](paradigm_sinker.png)
+
 Sinker transforms the normalized Postgres data into JSON documents stored in a simple key-value materialized view where
 the key is the Elasticsearch document ID and the value is the JSON document to be stored in Elasticsearch.
 
