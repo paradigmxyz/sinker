@@ -25,6 +25,12 @@ jobs:
           poetry-version: 1.4.0
       - name: Install dependencies
         run: poetry install
+      - name: Black
+        run: poetry run black src --check
+      - name: Flake8
+        run: poetry run flake8
+      - name: Mypy
+        run: poetry run mypy src --check-untyped-defs
       - name: Copy test envvars
         run: cp .env.test .env
       - name: Start docker containers
