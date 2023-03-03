@@ -3,7 +3,7 @@
 What are you [sinking about](https://www.youtube.com/watch?v=yR0lWICH3rY)?
 
 [![](https://img.shields.io/pypi/v/sinker.svg?maxAge=3600)](https://pypi.org/project/sinker/)
-[![CI status](https://github.com/paradigm-operations/sinker/actions/workflows/test.yml/badge.svg)](gh-ci)
+[![ci](https://github.com/paradigm-operations/sinker/actions/workflows/test.yml/badge.svg)](https://github.com/paradigm-operations/sinker/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/paradigm-operations/sinker/branch/main/graph/badge.svg?token=AIGMBZR0IG)](https://codecov.io/gh/paradigm-operations/sinker)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
