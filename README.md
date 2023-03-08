@@ -3,8 +3,8 @@
 What are you [sinking about](https://www.youtube.com/watch?v=yR0lWICH3rY)?
 
 [![](https://img.shields.io/pypi/v/sinker.svg?maxAge=3600)](https://pypi.org/project/sinker/)
-[![ci](https://github.com/paradigm-operations/sinker/actions/workflows/test.yml/badge.svg)](https://github.com/paradigm-operations/sinker/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/paradigm-operations/sinker/branch/main/graph/badge.svg?token=AIGMBZR0IG)](https://codecov.io/gh/paradigm-operations/sinker)
+[![ci](https://github.com/paradigmxyz/sinker/actions/workflows/test.yml/badge.svg)](https://github.com/paradigmxyz/sinker/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/paradigmxyz/sinker/branch/main/graph/badge.svg?token=AIGMBZR0IG)](https://codecov.io/gh/paradigmxyz/sinker)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -314,7 +314,7 @@ Poetry (version 1.4.0)
 Clone the repo:
 
 ```shell
-git clone git@github.com:paradigm-operations/sinker.git
+git clone git@github.com:paradigmxyz/sinker.git
 cd sinker
 ```
 
