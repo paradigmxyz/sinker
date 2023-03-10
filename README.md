@@ -336,6 +336,19 @@ Run tests:
 poetry run pytest -s
 ```
 
+## Operations
+
+### Docker
+
+To run Sinker as a Docker container, you can use the `docker/` files in this repo as a starting point.
+Bundle your views and indices configuration files into the Docker image, set up your environment variables, and deploy.
+
+### Monitoring and Alerting
+
+Setting up monitoring and alerting will give you confidence that Sinker is functioning properly.
+For instance, you can periodically check that the row counts in Postgres match the expected document counts in
+Elasticsearch.
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request.
