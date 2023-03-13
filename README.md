@@ -12,6 +12,7 @@ What are you [sinking about](https://www.youtube.com/watch?v=yR0lWICH3rY)?
 
 Sinker is middleware that synchronizes relational data from a Postgres database to Elasticsearch.
 It is simple to operate, requires minimal RAM, and handles arbitrarily complex schemas.
+Sinker is built by [Paradigm](https://www.paradigm.xyz/), and is licensed under the Apache and MIT licenses.
 
 ### For Example
 
