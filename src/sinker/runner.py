@@ -95,8 +95,8 @@ class Runner:
                 sinker: Sinker = self.views_to_sinkers[view]
                 futures.append(executor.submit(sinker.refresh_view))
             for future in concurrent.futures.as_completed(futures):
-                view: str = future.result()
-                logger.info(f"{view} view is refreshed")
+                view_result: str = future.result()
+                logger.info(f"{view_result} view is refreshed")
 
         # ---------------------------------------
         # a triggered update from here on will cause a new materialized view entry to be added to the "end"
