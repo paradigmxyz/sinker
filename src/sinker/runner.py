@@ -1,3 +1,4 @@
+import concurrent
 import json
 import logging
 from concurrent.futures import ThreadPoolExecutor
@@ -41,8 +42,12 @@ class Runner:
 
         # set up materialized views and Elasticsearch indices, and populate them with initial data
         with ThreadPoolExecutor(max_workers=len(self.views_to_sinkers)) as executor:
+            futures = []
             for sinker in self.views_to_sinkers.values():
-                executor.submit(sinker.setup)
+                futures.append(executor.submit(sinker.setup))
+            for future in concurrent.futures.as_completed(futures):
+                view: str = future.result()
+                logger.info(f"{view} sinker is set up")
 
         parent_tables_to_indices: dict[str, str] = {
             sinker.parent_table: sinker.index for sinker in self.views_to_sinkers.values()
@@ -84,11 +89,14 @@ class Runner:
             sleep(SINKER_POLL_INTERVAL)
             return
         with ThreadPoolExecutor(max_workers=len(views)) as executor:
+            futures = []
             for view_tuple in views:
                 view: str = view_tuple[0].split(SCHEMA_TABLE_DELIMITER)[1]
                 sinker: Sinker = self.views_to_sinkers[view]
-                executor.submit(sinker.refresh_view)
-                logger.debug(f"{view} view is refreshed")
+                futures.append(executor.submit(sinker.refresh_view))
+            for future in concurrent.futures.as_completed(futures):
+                view_result: str = future.result()
+                logger.info(f"{view_result} view is refreshed")
 
         # ---------------------------------------
         # a triggered update from here on will cause a new materialized view entry to be added to the "end"

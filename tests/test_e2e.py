@@ -32,6 +32,26 @@ def wait_for_pg_es():
             sleep(1)
 
 
+def test_exception_propagation_during_refresh(wait_for_pg_es):
+    runner = Runner()
+    # Update a record in Postgres but remove the materialized view so it errors when we iterate
+    conn = psycopg.connect(autocommit=True)
+    cur = conn.cursor()
+    cur.execute("update public.person set name = 'Uh oh' where id = 'p-1'")
+    cur.execute("drop materialized view sinker.person_mv")
+    # make sure the exception gets raised from the thread versus silently consuming it
+    with pytest.raises(psycopg.errors.UndefinedTable):
+        runner.iterate()
+
+
+def test_exception_propagation_during_setup(wait_for_pg_es, mocker):
+    # mock es.get_client() to raise an exception in the thread that sets up the sinker
+    mocker.patch("sinker.sinker.get_client", side_effect=elasticsearch.exceptions.ConnectionError('Boom!'))
+    # make sure the exception gets raised from the thread versus silently consuming it
+    with pytest.raises(elasticsearch.exceptions.ConnectionError):
+        Runner()
+
+
 def test_end_to_end(wait_for_pg_es):
     runner = Runner()
     es = get_client()

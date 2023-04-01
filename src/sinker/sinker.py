@@ -35,12 +35,13 @@ class Sinker:
         self.index: str = index
         self.parent_table: str = ""  # defined during setup process
 
-    def setup(self):
+    def setup(self) -> str:
         """
         Creates materialized views with supporting functions and triggers, and creates Elasticsearch indices
         """
         self.setup_pg()
         self.setup_es()
+        return self.view
 
     def setup_es(self) -> None:
         logger.info(f"Setting up the {self.index} Elasticsearch index")
@@ -127,7 +128,8 @@ class Sinker:
         # 0/24EF4718,17394,COMMIT 17394
         self.parent_table = schema_tables[-1]
 
-    def refresh_view(self) -> None:
+    def refresh_view(self) -> str:
         logger.info(f"Refreshing the {self.view} materialized view")
         refresh_view_query: str = q.REFRESH_VIEW.format(SINKER_SCHEMA, self.view)
         psycopg.connect(autocommit=True).execute(refresh_view_query)
+        return self.view
