@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sinker"
-version = "0.1.0"
+version = "0.1.1"
 description = "Synchronize Postgres to Elasticsearch"
 authors = ["Loren Siebert <loren@paradigm.xyz>"]
 license = "MIT/Apache-2.0"
