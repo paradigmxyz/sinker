@@ -7,6 +7,6 @@ def test_generate_schema_tables():
                'name', "name",
                'emailDomains',(select array_agg(split_part(email, '@', 2)) FROM unnest(emails) as email),
                ) as "person"
-        from "person" 
+        from "person"
         """
     assert list(generate_schema_tables(view_select_query)) == ["person"]
