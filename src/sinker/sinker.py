@@ -25,7 +25,7 @@ BACKFILL_CURSOR_NAME = "backfill"
 
 
 class Sinker:
-    def __init__(self, view, index):
+    def __init__(self, view: str, index: str):
         """
         :param view: Postgres materialized view name
         :param index: Elasticsearch index name
@@ -83,7 +83,7 @@ class Sinker:
                 settings=index_body["settings"],
             )
 
-    def setup_pg(self):
+    def setup_pg(self) -> None:
         """
         Creates materialized views with supporting functions and triggers, and sets the parent table that drives the
         materialized view
