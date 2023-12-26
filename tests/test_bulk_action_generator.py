@@ -19,9 +19,7 @@ def test_index_action(bulk_action_generator: BulkActionGenerator) -> None:
     assert bulk_action_generator.index_action(doc, slot_dict) == expected
 
 
-
 def test_delete_action(bulk_action_generator: BulkActionGenerator) -> None:
     slot_dict = dict(table="foo_table", id="a-1")
     expected = {"_op_type": "delete", "_index": "foo_index", "_id": "a-1"}
     assert bulk_action_generator.delete_action(slot_dict) == expected
-
