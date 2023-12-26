@@ -6,6 +6,7 @@ from typing import Iterable, Dict, Any, Match, Optional
 
 import psycopg
 
+
 import sinker.query_templates as q
 from sinker.settings import SINKER_REPLICATION_SLOT, PGCHUNK_SIZE
 
@@ -33,26 +34,28 @@ class BulkActionGenerator:
                 cursor.itersize = PGCHUNK_SIZE
                 # gather all pending transactions on server-side cursor, which has the side effect of
                 # truncating the replication slot
-                cursor.execute(q.GET_ALL_CHANGES.format(SINKER_REPLICATION_SLOT))
+                cursor.execute(
+                    q.GET_ALL_CHANGES.format(SINKER_REPLICATION_SLOT))
                 for xid, lsn, data in cursor:
-                    logger.debug(f"Got LSN {lsn} for xid {xid} with data {data}")
+                    logger.debug(
+                        f"Got LSN {lsn} for xid {xid} with data {data}")
                     match: Optional[Match[str]] = SLOT_RE.search(data)
                     if match:
                         logger.debug(f"LSN entry {lsn} matches pattern")
                         slot_dict: dict[str, str] = match.groupdict()
-                        slot_dict["table"] = slot_dict["table"].replace('"', "")
+                        slot_dict["table"] = slot_dict["table"].replace(
+                            '"', "")
                         if slot_dict["table"] in self.views_to_indices and slot_dict["tg_op"] == "INSERT":
-                            doc: str = data.split("doc[json]:")[1].replace("'", "")
+                            doc: str = data.split("doc[json]:")[
+                                1].replace("'", "")
                             logger.debug(
                                 f"Putting doc {slot_dict['id']} from {slot_dict['table']}"
-                                f" into {self.views_to_indices[slot_dict['table']]}"
-                            )
+                                f" into {self.views_to_indices[slot_dict['table']]}")
                             yield self.index_action(doc, slot_dict)
                         elif slot_dict["table"] in self.parent_tables_to_indices and slot_dict["tg_op"] == "DELETE":
                             logger.debug(
                                 f"Deleting doc {slot_dict['id']}"
-                                f" from {self.parent_tables_to_indices[slot_dict['table']]}"
-                            )
+                                f" from {self.parent_tables_to_indices[slot_dict['table']]}")
                             yield self.delete_action(slot_dict)
                         else:
                             logger.debug(f"Ignoring LSN {lsn}")
