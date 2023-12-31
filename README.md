@@ -18,9 +18,9 @@ Sinker is built by [Paradigm](https://www.paradigm.xyz/), and is licensed under 
 
 In Postgres, you might have a normalized schema like this:
 
-- A Student and a Teacher refers to a Person
+- A Student and a Teacher refer to a Person
 - A Course is taught by a Teacher
-- Students have taken and belong to many Courses through the Enrollment join table
+- Students have and belong to many Courses through the Enrollment join table
 
 ![schema](sinker_schema.png)
 
@@ -78,7 +78,7 @@ Sinker creates triggers on the Postgres tables that you want to synchronize (e.g
 above). When a row is inserted, updated, or deleted in any of these tables, the trigger schedules the materialized view
 to be refreshed at the next interval.
 
-The changes into the materialized view are sent to a logical replication slot. Sinker reads from this slot and indexes the
+The changes to the materialized view are sent to a logical replication slot. Sinker reads from this slot and indexes the
 documents in Elasticsearch.
 
 You define the query behind the materialized view, so you can denormalize the data however you want, filter out unwanted
