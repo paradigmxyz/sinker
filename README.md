@@ -331,7 +331,7 @@ Spin up Postgres and Elasticsearch:
 docker-compose --env-file=.env.test up -d
 ```
 
-Run tests:
+Run tests (with -s option to allow more verbose output):
 
 ```shell
 poetry run pytest -s
