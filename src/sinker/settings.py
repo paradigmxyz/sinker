@@ -1,4 +1,5 @@
 """Sinker settings."""
+
 import logging.config
 import os
 
