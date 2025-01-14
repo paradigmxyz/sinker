@@ -111,5 +111,7 @@ class Runner:
         # activity, like inserts into a schema/table you aren't synchronizing to Elasticsearch. If you are worried
         # about your replication slot growing too large during a scenario like this, you can periodically trigger
         # a materialized view refresh to clear out the slot (see the CREATE_TODO_ENTRY query template).
-        processed_tuples, _ = bulk(get_client(), self.bulk_gen.generate_actions(), **ELASTICSEARCH_BULK_KWARGS)
+        processed_tuples, _ = bulk(
+            client=get_client(), actions=self.bulk_gen.generate_actions(), stats_only=False, **ELASTICSEARCH_BULK_KWARGS
+        )
         logger.info(f"Processed {processed_tuples} tuples from replication slot")

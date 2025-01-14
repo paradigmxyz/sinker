@@ -13,7 +13,7 @@ SCHEMA_TABLE_DELIMITER = "."
 
 # Sinker:
 # path to the views/indices configs
-SINKER_DEFINITIONS_PATH = env.str("SINKER_DEFINITIONS_PATH", default=None)
+SINKER_DEFINITIONS_PATH = env.str("SINKER_DEFINITIONS_PATH", default=".")
 SINKER_SCHEMA = env.str("SINKER_SCHEMA", default=DEFAULT_SCHEMA)
 SINKER_REPLICATION_SLOT = env.str("SINKER_REPLICATION_SLOT", default="sinker")
 SINKER_TODO_TABLE = env.str("SINKER_TODO_TABLE", default="todo")
