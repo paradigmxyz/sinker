@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   postgres:
     image: postgres:15
@@ -22,6 +20,8 @@ services:
       - xpack.security.enabled=false
       - discovery.type=single-node
       - action.auto_create_index=false
+      - ES_JAVA_OPTS=-XX:UseSVE=0
+      - CLI_JAVA_OPTS=-XX:UseSVE=0
     ulimits:
       memlock:
         soft: -1

@@ -307,9 +307,9 @@ and [`docker-compose`](https://docs.docker.com/compose/install/) installed.
 
 ```shell
 % docker-compose --version
-Docker Compose version v2.15.1
+Docker Compose version v2.31.0
 % poetry --version
-Poetry (version 1.4.0)
+Poetry (version 1.8.4)
 ```
 
 Clone the repo:
@@ -334,6 +334,7 @@ docker-compose --env-file=.env.test up -d
 Run tests (with -s option to allow more verbose output):
 
 ```shell
+cp .env.test .env # copy the test environment variables
 poetry run pytest -s
 ```
 
