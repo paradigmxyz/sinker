@@ -22,7 +22,7 @@ jobs:
       - name: Run image
         uses: abatilo/actions-poetry@v2
         with:
-          poetry-version: 1.4.0
+          poetry-version: 1.8.4
       - name: Install dependencies
         run: poetry install
       - name: Black
@@ -34,7 +34,7 @@ jobs:
       - name: Copy test envvars
         run: cp .env.test .env
       - name: Start docker containers
-        run: docker-compose up --detach
+        run: docker compose up --detach
       - name: Tests
         run: poetry run pytest --cov=src --cov-report=xml
       - name: Upload coverage reports to Codecov
