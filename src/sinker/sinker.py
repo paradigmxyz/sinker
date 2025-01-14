@@ -52,7 +52,9 @@ class Sinker:
     def backfill_index(self) -> None:
         # populate ES index with initial data from materialized view
         logger.info(f"Populating {self.index} with initial data from {self.view}")
-        added_docs, _ = bulk(get_client(), self.backfill_stream(), **ELASTICSEARCH_BULK_KWARGS)
+        added_docs, _ = bulk(
+            client=get_client(), actions=self.backfill_stream(), stats_only=False, **ELASTICSEARCH_BULK_KWARGS
+        )
         logger.info(f"Added {added_docs} documents to {self.index}")
 
     def backfill_stream(self) -> Iterable[Dict[str, Any]]:
