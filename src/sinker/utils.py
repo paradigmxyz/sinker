@@ -1,20 +1,18 @@
-import re
+from typing import Set, Tuple
 
-from typing import Iterable
+import sqlglot
+from sqlglot.expressions import Table, CTE
 
-TABLE_RE = re.compile(r"from\s\"?(\S+)\b", re.I)
 
-
-def generate_schema_tables(view_select_query: str) -> Iterable[str]:
+def parse_schema_tables(view_select_query: str) -> Tuple[str, Set[str]]:
     """
-    Given a view select query, return a list of unique tables that are referenced in the query
-    in the order they were encountered.
+    Given a view select query, return a primary parent table and the set of unique tables that are referenced in the query.
     Skip anything that looks like a function call.
     :param view_select_query: The select query from the view
     """
-    seen: set = set()
-    for table_candidate in TABLE_RE.findall(view_select_query):
-        if "(" not in table_candidate:
-            if table_candidate not in seen:
-                seen.add(table_candidate)
-                yield table_candidate
+    parsed = sqlglot.parse_one(view_select_query)
+    parent_table = parsed.find(Table).name
+    tables = {table.name for table in parsed.find_all(Table)}
+    ctes = {cte.alias for cte in parsed.find_all(CTE)}
+    schema_tables = tables - ctes
+    return parent_table, schema_tables

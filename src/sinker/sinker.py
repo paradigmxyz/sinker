@@ -17,7 +17,7 @@ from .settings import (
     PGCHUNK_SIZE,
     SCHEMA_TABLE_DELIMITER,
 )
-from .utils import generate_schema_tables
+from .utils import parse_schema_tables
 
 logger = logging.getLogger(__name__)
 
@@ -107,23 +107,23 @@ class Sinker:
         plpgsql: str = f"{schema_view_name}_fn"
         create_function: str = q.CREATE_FUNCTION.format(plpgsql, SINKER_SCHEMA, SINKER_TODO_TABLE, schema_view_name)
         ddl_list.append(create_function)
-        for schema_table in generate_schema_tables(view_select_query):
+        # The last table is the top-level table that gets DELETE events with an ID in the replication slot.
+        # The materialized views do not contain the ID of the doc being deleted,
+        # so we'll use this table's delete events as a proxy.
+        # lsn,xid,data
+        # 0/24EDA4D8,17393,BEGIN 17393
+        # 0/24EDA4D8,17393,"table public.""Foo"": DELETE: id[text]:'91754ea9-2983-4cf7-bdf9-fc23d2386d90'"
+        # 0/24EDC1B0,17393,COMMIT 17393
+        # 0/24EDC228,17394,BEGIN 17394
+        # 0/24EF0D60,17394,table sinker.foo_mv: DELETE: (no-tuple-data)
+        # 0/24EF4718,17394,COMMIT 17394
+        self.parent_table, schema_tables = parse_schema_tables(view_select_query)
+        for schema_table in schema_tables:
             schema, _, table = schema_table.rpartition(SCHEMA_TABLE_DELIMITER)
             schema = schema or DEFAULT_SCHEMA
             trigger_name: str = f"{SINKER_SCHEMA}_{self.view}_{schema}_{table}"
             create_trigger: str = q.CREATE_TRIGGER.format(trigger_name, schema, table, plpgsql)
             ddl_list.append(create_trigger)
-            # The last table is the top-level table that gets DELETE events with an ID in the replication slot.
-            # The materialized views do not contain the ID of the doc being deleted,
-            # so we'll use this table's delete events as a proxy.
-            # lsn,xid,data
-            # 0/24EDA4D8,17393,BEGIN 17393
-            # 0/24EDA4D8,17393,"table public.""Foo"": DELETE: id[text]:'91754ea9-2983-4cf7-bdf9-fc23d2386d90'"
-            # 0/24EDC1B0,17393,COMMIT 17393
-            # 0/24EDC228,17394,BEGIN 17394
-            # 0/24EF0D60,17394,table sinker.foo_mv: DELETE: (no-tuple-data)
-            # 0/24EF4718,17394,COMMIT 17394
-            self.parent_table = schema_table
         create_todo_entry: str = q.CREATE_TODO_ENTRY.format(SINKER_SCHEMA, SINKER_TODO_TABLE, schema_view_name)
         ddl_list.append(create_todo_entry)
         psycopg.connect(autocommit=True).execute("; ".join(ddl_list))
