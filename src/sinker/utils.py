@@ -6,8 +6,8 @@ from sqlglot.expressions import Table, CTE
 
 def parse_schema_tables(view_select_query: str) -> Tuple[str, Set[str]]:
     """
-    Given a view select query, return a primary parent table and the set of unique tables that are referenced in the query.
-    Skip anything that looks like a function call.
+    Given a view select query, return a primary parent table and the set of unique tables that are referenced in the
+    query. Skip anything that looks like a function call.
     :param view_select_query: The select query from the view
     """
     parsed = sqlglot.parse_one(view_select_query)
