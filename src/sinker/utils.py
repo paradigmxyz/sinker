@@ -11,8 +11,10 @@ def parse_schema_tables(view_select_query: str) -> Tuple[str, Set[str]]:
     :param view_select_query: The select query from the view
     """
     parsed = sqlglot.parse_one(view_select_query)
-    parent_table = parsed.find(Table).name
+    parent_table = parsed.find(Table)
+    if parent_table is None:
+        raise ValueError("No table found in the query")
     tables = {table.name for table in parsed.find_all(Table)}
     ctes = {cte.alias for cte in parsed.find_all(CTE)}
     schema_tables = tables - ctes
-    return parent_table, schema_tables
+    return parent_table.name, schema_tables

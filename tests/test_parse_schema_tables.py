@@ -60,3 +60,13 @@ def test_parse_schema_tables_with_cte():
     parent_table, schema_tables = parse_schema_tables(view_select_query)
     assert parent_table == "HostedEvent"
     assert schema_tables == {"EmailAddress", "HostedEvent", "HostedEventAttendance", "Person"}
+
+
+def test_error_handling_on_query_with_no_table():
+    view_select_query = """select 1"""
+    try:
+        parse_schema_tables(view_select_query)
+    except ValueError as e:
+        assert str(e) == "No table found in the query"
+    else:
+        assert False, "Expected ValueError"
