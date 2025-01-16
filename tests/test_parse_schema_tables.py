@@ -62,6 +62,32 @@ def test_parse_schema_tables_with_cte():
     assert schema_tables == {"EmailAddress", "HostedEvent", "HostedEventAttendance", "Person"}
 
 
+def test_parse_schema_tables_handles_blank_table_name():
+    view_select_query = """
+        select id,
+               json_build_object(
+                       'summary', "summary",
+                       'startTime', "start_time",
+                       'organizerEmail', "organizerEmail",
+                       'attendees', (select json_agg(json_build_object('email', key, 'eventResponse', value))
+                            as formatted_attendees
+                                     from (select id, key, value
+                                           from "googleEvents",
+                                               jsonb_each_text(attendees) as kv(key, value)) as subquery
+                                     where id = "googleEvents".id),
+                       'organizationIds', (select array_agg("_NotesToOrganization"."B")
+                                           from "_NotesToOrganization"
+                                                    left join public."Notes" N on "_NotesToOrganization"."A" = N.id
+                                           where "googleEventId" = "googleEvents".id)
+               ) as "google_events"
+        from "googleEvents";
+    """
+    parent_table, schema_tables = parse_schema_tables(view_select_query)
+    assert parent_table == "googleEvents"
+    # parsed.find_all(Table) returns a Table object with a blank '' name
+    assert schema_tables == {"googleEvents", "_NotesToOrganization", "Notes"}
+
+
 def test_error_handling_on_query_with_no_table():
     view_select_query = """select 1"""
     try:

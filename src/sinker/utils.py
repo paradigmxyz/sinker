@@ -14,7 +14,7 @@ def parse_schema_tables(view_select_query: str) -> Tuple[str, Set[str]]:
     parent_table = parsed.find(Table)
     if parent_table is None:
         raise ValueError("No table found in the query")
-    tables = {table.name for table in parsed.find_all(Table)}
+    tables = {table.name for table in parsed.find_all(Table) if table.name}
     ctes = {cte.alias for cte in parsed.find_all(CTE)}
     schema_tables = tables - ctes
     return parent_table.name, schema_tables
