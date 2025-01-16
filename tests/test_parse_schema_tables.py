@@ -16,6 +16,7 @@ def test_parse_schema_tables():
     assert parent_table == "person"
     assert schema_tables == {"EmailAddress", "person"}
 
+
 def test_parse_schema_tables_with_cte():
     view_select_query = """
         WITH
