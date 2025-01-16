@@ -42,7 +42,8 @@ def test_parse_schema_tables_with_cte():
                 'summary', "name",
                 'startTime', "timestamp",
                 'attendees', (
-                    SELECT json_agg(json_build_object('email', attendees.email, 'eventResponse', attendees.status)) AS formatted_attendees
+                    SELECT json_agg(json_build_object('email', attendees.email, 'eventResponse', attendees.status))
+                        AS formatted_attendees
                     FROM attendees
                     WHERE attendees."hostedEventId" = "HostedEvent".id
                 ),
