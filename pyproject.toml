@@ -19,7 +19,7 @@ sqlglot = "^26.2.1"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = ">=6,<8"
-black = ">=23.1,<25.0"
+black = ">=23.1,<26.0"
 mypy = "^1.0.0"
 psycopg-binary = "^3.1.8"
 
