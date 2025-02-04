@@ -35,7 +35,9 @@ class Runner:
             q.DROP_TODO_TABLE.format(SINKER_SCHEMA, SINKER_TODO_TABLE),
             q.CREATE_TODO_TABLE.format(SINKER_SCHEMA, SINKER_TODO_TABLE),
         ]
-        psycopg.connect(autocommit=True).execute("; ".join(ddl_list))
+        with psycopg.connect(autocommit=True) as conn:
+            with conn.cursor() as cur:
+                cur.execute("; ".join(ddl_list))
         self.views_to_sinkers: dict[str, Sinker] = {
             view: Sinker(view, index) for (view, index) in views_to_indices.items()
         }
