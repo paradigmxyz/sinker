@@ -15,7 +15,7 @@ elasticsearch = "^8.17.0"
 environs = ">=9.5,<15.0"
 psycopg = "^3.1.8"
 pytest-mock = "^3.10.0"
-sqlglot = "^26.2.1"
+sqlglot = ">=26.2.1,<28.0.0"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = ">=6,<8"
