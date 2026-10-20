@@ -1,7 +1,7 @@
 FROM --platform=linux/amd64 python:3.11
 RUN apt update
 RUN apt install -yq libpq-dev postgresql-client
-RUN pip install --upgrade pip
+RUN python -m pip install --upgrade pip==26.2.2
 RUN pip install sinker
 RUN useradd sinker
 ARG WORKDIR=/sinker
